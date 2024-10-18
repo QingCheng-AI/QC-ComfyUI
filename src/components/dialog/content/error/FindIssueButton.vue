@@ -1,0 +1,28 @@
+<template>
+  <Button
+    @click="openGitHubIssues"
+    :label="$t('findIssues')"
+    severity="secondary"
+    icon="pi pi-github"
+  >
+  </Button>
+</template>
+
+<script setup lang="ts">
+import { computed } from 'vue'
+import Button from 'primevue/button'
+
+const props = defineProps<{
+  errorMessage: string
+  repoOwner: string
+  repoName: string
+}>()
+
+const queryString = computed(() => props.errorMessage + ' is:issue')
+
+const openGitHubIssues = () => {
+  const query = encodeURIComponent(queryString.value)
+  const url = `https://github.com/${props.repoOwner}/${props.repoName}/issues?q=${query}`
+  window.open(url, '_blank')
+}
+</script>
