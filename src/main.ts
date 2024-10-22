@@ -16,20 +16,35 @@ import '@/assets/css/style.css'
 import 'primeicons/primeicons.css'
 
 // 改动：重写fetch函数，添加 Authorization 头，进行用户身份鉴权
-// 保存原始的 fetch 函数
-const originalFetch = window.fetch;
+// 定义要添加的 header 键值对
+const customHeader = {
+  'Authorization': localStorage.getItem('accessToken') || ''
+};
 
-// 重写 fetch 函数
-window.fetch = async function (url, options = {}) {
-  // 确保 options 是一个对象
-  options.headers = options.headers || {};
-  // 获取localstorage中的token
-  const token = localStorage.getItem('accessToken') || '';
-  // 添加 Authorization 头
-  options.headers['Authorization'] = token;
+// 重写 window.fetch 函数
+const originalFetch = window.fetch;
+window.fetch = function(input, init = {}) {
+  // 检查请求参数是否为格式化的对象
+  if (typeof input === 'object' && input !== null) {
+    // 如果 headers 属性不存在,则创建一个新的 Headers 对象
+    if (!init.headers) {
+      init.headers = new Headers();
+    } else if (init.headers instanceof Headers) {
+      // 如果 headers 已经是 Headers 对象,则创建一个新的副本
+      init.headers = new Headers(init.headers);
+    } else {
+      // 如果 headers 是普通对象,则创建一个新的 Headers 对象
+      init.headers = new Headers(Object.entries(init.headers));
+    }
+
+    // 添加自定义 header
+    for (const [key, value] of Object.entries(customHeader)) {
+      init.headers.append(key, value);
+    }
+  }
 
   // 调用原始的 fetch 函数
-  return originalFetch(url, options);
+  return originalFetch(input, init);
 };
 
 

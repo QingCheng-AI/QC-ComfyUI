@@ -113,7 +113,7 @@ export class UserSelectionScreen {
       })
 
       if (user) {
-        const name = localStorage['Comfy.userName']
+        const name = localStorage['accessToken']
         if (name) {
           input.value = name
         }

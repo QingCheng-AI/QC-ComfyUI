@@ -1742,82 +1742,82 @@ export class ComfyApp {
     await api.storeSettings(settings)
   }
 
-  async #setUser() {
-    const userConfig = await api.getUserConfig()
-    this.storageLocation = userConfig.storage
-    if (typeof userConfig.migrated == 'boolean') {
-      // Single user mode migrated true/false for if the default user is created
-      if (!userConfig.migrated && this.storageLocation === 'server') {
-        // Default user not created yet
-        await this.#migrateSettings()
-      }
-      return
-    }
+  // async #setUser() {
+    // const userConfig = await api.getUserConfig()
+    // this.storageLocation = userConfig.storage
+    // if (typeof userConfig.migrated == 'boolean') {
+    //   // Single user mode migrated true/false for if the default user is created
+    //   if (!userConfig.migrated && this.storageLocation === 'server') {
+    //     // Default user not created yet
+    //     await this.#migrateSettings()
+    //   }
+    //   return
+    // }
 
-    this.multiUserServer = true
-    let user = localStorage['Comfy.userId']
-    const users = userConfig.users ?? {}
-    if (!user || !users[user]) {
-      // Lift spinner / BlockUI for user selection.
-      if (this.vueAppReady) useWorkspaceStore().spinner = false
+    // this.multiUserServer = true
+    // let user = localStorage['Comfy.userId']
+    // const users = userConfig.users ?? {}
+    // if (!user || !users[user]) {
+    //   // Lift spinner / BlockUI for user selection.
+    //   if (this.vueAppReady) useWorkspaceStore().spinner = false
 
-      // This will rarely be hit so move the loading to on demand
-      const { UserSelectionScreen } = await import('./ui/userSelection')
+    //   // This will rarely be hit so move the loading to on demand
+    //   const { UserSelectionScreen } = await import('./ui/userSelection')
 
-      this.ui.menuContainer.style.display = 'none'
-      const { userId, username, created } =
-        await new UserSelectionScreen().show(users, user)
-      this.ui.menuContainer.style.display = ''
+    //   this.ui.menuContainer.style.display = 'none'
+    //   const { userId, username, created } =
+    //     await new UserSelectionScreen().show(users, user)
+    //   this.ui.menuContainer.style.display = ''
 
-      user = userId
-      localStorage['Comfy.userName'] = username
-      localStorage['Comfy.userId'] = user
+    //   user = userId
+    //   localStorage['Comfy.userName'] = username
+      // localStorage['Comfy.userId'] = user
 
-      if (created) {
-        api.user = user
-        await this.#migrateSettings()
-      }
-    }
+    //   if (created) {
+    //     api.user = user
+    //     await this.#migrateSettings()
+    //   }
+    // }
 
-    api.user = user
+    // api.user = user
 
-    this.ui.settings.addSetting({
-      id: 'Comfy.SwitchUser',
-      name: 'Switch User',
-      type: (name) => {
-        let currentUser = localStorage['Comfy.userName']
-        if (currentUser) {
-          currentUser = ` (${currentUser})`
-        }
-        return $el('tr', [
-          $el('td', [
-            $el('label', {
-              textContent: name
-            })
-          ]),
-          $el('td', [
-            $el('button', {
-              textContent: name + (currentUser ?? ''),
-              onclick: () => {
-                delete localStorage['Comfy.userId']
-                delete localStorage['Comfy.userName']
-                window.location.reload()
-              }
-            })
-          ])
-        ])
-      },
-      // TODO: Is that the correct default value?
-      defaultValue: undefined
-    })
-  }
+    // this.ui.settings.addSetting({
+    //   id: 'Comfy.SwitchUser',
+    //   name: 'Switch User',
+    //   type: (name) => {
+    //     let currentUser = localStorage['Comfy.userName']
+    //     if (currentUser) {
+    //       currentUser = ` (${currentUser})`
+    //     }
+    //     return $el('tr', [
+    //       $el('td', [
+    //         $el('label', {
+    //           textContent: name
+    //         })
+    //       ]),
+    //       $el('td', [
+    //         $el('button', {
+    //           textContent: name + (currentUser ?? ''),
+    //           onclick: () => {
+    //             delete localStorage['Comfy.userId']
+    //             delete localStorage['Comfy.userName']
+    //             window.location.reload()
+    //           }
+    //         })
+    //       ])
+    //     ])
+    //   },
+    //   // TODO: Is that the correct default value?
+    //   defaultValue: undefined
+    // })
+  // }
 
   /**
    * Set up the app on the page
    */
   async setup(canvasEl: HTMLCanvasElement) {
     this.canvasEl = canvasEl
-    await this.#setUser()
+    // await this.#setUser()
 
     this.resizeCanvas()
 
