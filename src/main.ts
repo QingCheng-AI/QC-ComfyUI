@@ -23,7 +23,13 @@ const customHeader = {
 
 // 重写 window.fetch 函数
 const originalFetch = window.fetch;
-window.fetch = function(input, init = {}) {
+window.fetch = function (input, init = {}) {
+  console.log('fetch called');
+  console.log(customHeader);
+  console.log(localStorage.getItem('accessToken'));
+console.log(typeof input === 'object');
+console.log(input !== null);
+
   // 检查请求参数是否为格式化的对象
   if (typeof input === 'object' && input !== null) {
     // 如果 headers 属性不存在,则创建一个新的 Headers 对象
@@ -41,7 +47,15 @@ window.fetch = function(input, init = {}) {
     for (const [key, value] of Object.entries(customHeader)) {
       init.headers.append(key, value);
     }
+    console.log('init.headers', init.headers);
+    init.headers['Authorization'] = localStorage.getItem('accessToken')
+    console.log('init.headers', init.headers);
+  }else{
+    // 如果请求参数不是格式化的对象,则任然添加自定义 header
+    init.headers['Authorization'] = localStorage.getItem('accessToken')
+    console.log('init.headers', init.headers);
   }
+  console.log('结束 fetch');
 
   // 调用原始的 fetch 函数
   return originalFetch(input, init);
