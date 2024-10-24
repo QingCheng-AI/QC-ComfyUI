@@ -89,9 +89,12 @@ export class ComfyWorkflowManager extends EventTarget {
    * @param {string | ComfyWorkflow | null} workflow
    */
   setWorkflow(workflow) {
+    // 是否传入的工作流是字符串名称
     if (workflow && typeof workflow === 'string') {
+      // 查询工作流在工作流列表中是否存在
       const found = this.workflows.find((w) => w.path === workflow)
       if (found) {
+        // 存在，设置为工作流，用新结构替换原有字符串
         workflow = found
         workflow.unsaved = !workflow
       }
@@ -102,8 +105,8 @@ export class ComfyWorkflowManager extends EventTarget {
       workflow = new ComfyWorkflow(
         this,
         workflow ||
-          'Unsaved Workflow' +
-            (this.#unsavedCount++ ? ` (${this.#unsavedCount})` : '')
+        'Unsaved Workflow' +
+        (this.#unsavedCount++ ? ` (${this.#unsavedCount})` : '')
       )
       this.workflowLookup[workflow.key] = workflow
     }
@@ -229,8 +232,14 @@ export class ComfyWorkflow {
     this.name = trimJsonExt(pathParts[pathParts.length - 1])
   }
 
+  // 获取工作流封装函数TODO:没搞懂调用链路
   async getWorkflowData() {
-    const resp = await api.getUserData('workflows/' + this.path)
+    // 获取当前 URL
+    const currentUrl = new URL(window.location.href);
+    // 从 URL 查询参数中获取 workflowName 的值
+    const id = currentUrl.searchParams.get('id');
+    const from = currentUrl.searchParams.get('from');
+    const resp = await api.getUserData('workflows/' + this.path, undefined, id, from)
     if (resp.status !== 200) {
       useToastStore().addAlert(
         `Error loading workflow file '${this.path}': ${resp.status} ${resp.statusText}`
@@ -240,6 +249,7 @@ export class ComfyWorkflow {
     return await resp.json()
   }
 
+  // 加载函数
   async load() {
     if (this.isOpen) {
       await this.manager.app.loadGraphData(
@@ -275,9 +285,9 @@ export class ComfyWorkflow {
     } catch (error) {
       useToastStore().addAlert(
         'Error favoriting workflow ' +
-          this.path +
-          '\n' +
-          (error.message ?? error)
+        this.path +
+        '\n' +
+        (error.message ?? error)
       )
     }
   }

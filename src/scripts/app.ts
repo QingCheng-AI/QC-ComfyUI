@@ -704,9 +704,9 @@ export class ComfyApp {
               output.images.map((params) => {
                 return api.apiURL(
                   '/view?' +
-                    new URLSearchParams(params).toString() +
-                    (this.animatedImages ? '' : app.getPreviewFormatParam()) +
-                    app.getRandParam()
+                  new URLSearchParams(params).toString() +
+                  (this.animatedImages ? '' : app.getPreviewFormatParam()) +
+                  app.getRandParam()
                 )
               })
             )
@@ -841,18 +841,18 @@ export class ComfyApp {
                 naturalWidth: largestDimension,
                 naturalHeight: largestDimension
               }
-              ;({ cellWidth, cellHeight, cols, shiftX } = calculateImageGrid(
-                fakeImgs,
-                dw,
-                dh
-              ))
+                ; ({ cellWidth, cellHeight, cols, shiftX } = calculateImageGrid(
+                  fakeImgs,
+                  dw,
+                  dh
+                ))
             } else {
               cell_padding = 0
-              ;({ cellWidth, cellHeight, cols, shiftX } = calculateImageGrid(
-                this.imgs,
-                dw,
-                dh
-              ))
+                ; ({ cellWidth, cellHeight, cols, shiftX } = calculateImageGrid(
+                  this.imgs,
+                  dw,
+                  dh
+                ))
             }
 
             let anyHovered = false
@@ -1734,7 +1734,7 @@ export class ComfyApp {
       if (v) {
         try {
           p[n] = JSON.parse(v)
-        } catch (error) {}
+        } catch (error) { }
       }
       return p
     }, {})
@@ -1743,73 +1743,73 @@ export class ComfyApp {
   }
 
   // async #setUser() {
-    // const userConfig = await api.getUserConfig()
-    // this.storageLocation = userConfig.storage
-    // if (typeof userConfig.migrated == 'boolean') {
-    //   // Single user mode migrated true/false for if the default user is created
-    //   if (!userConfig.migrated && this.storageLocation === 'server') {
-    //     // Default user not created yet
-    //     await this.#migrateSettings()
-    //   }
-    //   return
-    // }
+  // const userConfig = await api.getUserConfig()
+  // this.storageLocation = userConfig.storage
+  // if (typeof userConfig.migrated == 'boolean') {
+  //   // Single user mode migrated true/false for if the default user is created
+  //   if (!userConfig.migrated && this.storageLocation === 'server') {
+  //     // Default user not created yet
+  //     await this.#migrateSettings()
+  //   }
+  //   return
+  // }
 
-    // this.multiUserServer = true
-    // let user = localStorage['Comfy.userId']
-    // const users = userConfig.users ?? {}
-    // if (!user || !users[user]) {
-    //   // Lift spinner / BlockUI for user selection.
-    //   if (this.vueAppReady) useWorkspaceStore().spinner = false
+  // this.multiUserServer = true
+  // let user = localStorage['Comfy.userId']
+  // const users = userConfig.users ?? {}
+  // if (!user || !users[user]) {
+  //   // Lift spinner / BlockUI for user selection.
+  //   if (this.vueAppReady) useWorkspaceStore().spinner = false
 
-    //   // This will rarely be hit so move the loading to on demand
-    //   const { UserSelectionScreen } = await import('./ui/userSelection')
+  //   // This will rarely be hit so move the loading to on demand
+  //   const { UserSelectionScreen } = await import('./ui/userSelection')
 
-    //   this.ui.menuContainer.style.display = 'none'
-    //   const { userId, username, created } =
-    //     await new UserSelectionScreen().show(users, user)
-    //   this.ui.menuContainer.style.display = ''
+  //   this.ui.menuContainer.style.display = 'none'
+  //   const { userId, username, created } =
+  //     await new UserSelectionScreen().show(users, user)
+  //   this.ui.menuContainer.style.display = ''
 
-    //   user = userId
-    //   localStorage['Comfy.userName'] = username
-      // localStorage['Comfy.userId'] = user
+  //   user = userId
+  //   localStorage['Comfy.userName'] = username
+  // localStorage['Comfy.userId'] = user
 
-    //   if (created) {
-    //     api.user = user
-    //     await this.#migrateSettings()
-    //   }
-    // }
+  //   if (created) {
+  //     api.user = user
+  //     await this.#migrateSettings()
+  //   }
+  // }
 
-    // api.user = user
+  // api.user = user
 
-    // this.ui.settings.addSetting({
-    //   id: 'Comfy.SwitchUser',
-    //   name: 'Switch User',
-    //   type: (name) => {
-    //     let currentUser = localStorage['Comfy.userName']
-    //     if (currentUser) {
-    //       currentUser = ` (${currentUser})`
-    //     }
-    //     return $el('tr', [
-    //       $el('td', [
-    //         $el('label', {
-    //           textContent: name
-    //         })
-    //       ]),
-    //       $el('td', [
-    //         $el('button', {
-    //           textContent: name + (currentUser ?? ''),
-    //           onclick: () => {
-    //             delete localStorage['Comfy.userId']
-    //             delete localStorage['Comfy.userName']
-    //             window.location.reload()
-    //           }
-    //         })
-    //       ])
-    //     ])
-    //   },
-    //   // TODO: Is that the correct default value?
-    //   defaultValue: undefined
-    // })
+  // this.ui.settings.addSetting({
+  //   id: 'Comfy.SwitchUser',
+  //   name: 'Switch User',
+  //   type: (name) => {
+  //     let currentUser = localStorage['Comfy.userName']
+  //     if (currentUser) {
+  //       currentUser = ` (${currentUser})`
+  //     }
+  //     return $el('tr', [
+  //       $el('td', [
+  //         $el('label', {
+  //           textContent: name
+  //         })
+  //       ]),
+  //       $el('td', [
+  //         $el('button', {
+  //           textContent: name + (currentUser ?? ''),
+  //           onclick: () => {
+  //             delete localStorage['Comfy.userId']
+  //             delete localStorage['Comfy.userName']
+  //             window.location.reload()
+  //           }
+  //         })
+  //       ])
+  //     ])
+  //   },
+  //   // TODO: Is that the correct default value?
+  //   defaultValue: undefined
+  // })
   // }
 
   /**
@@ -1877,7 +1877,12 @@ export class ComfyApp {
       const loadWorkflow = async (json) => {
         if (json) {
           const workflow = JSON.parse(json)
-          const workflowName = getStorageValue('Comfy.PreviousWorkflow')
+          // TODO:不再从本地存储中读取workflowName，而是从url中读取，没有再说
+          // const workflowName = getStorageValue('Comfy.PreviousWorkflow')
+          // 获取当前 URL
+          const currentUrl = new URL(window.location.href);
+          // 从 URL 查询参数中获取 workflowName 的值
+          const workflowName = currentUrl.searchParams.get('workflowName');
           await this.loadGraphData(workflow, true, true, workflowName)
           return true
         }
@@ -2254,7 +2259,7 @@ export class ComfyApp {
       // TODO: Show validation error in a dialog.
       const validatedGraphData = await validateComfyWorkflow(
         graphData,
-        /* onError=*/ (err) => {
+        /* onError=*/(err) => {
           useToastStore().addAlert(err)
         }
       )
@@ -2625,7 +2630,7 @@ export class ComfyApp {
 
     try {
       while (this.#queueItems.length) {
-        ;({ number, batchCount } = this.#queueItems.pop())
+        ; ({ number, batchCount } = this.#queueItems.pop())
 
         for (let i = 0; i < batchCount; i++) {
           const p = await this.graphToPrompt()
@@ -2641,7 +2646,7 @@ export class ComfyApp {
                   id: res.prompt_id,
                   nodes: Object.keys(p.output)
                 })
-              } catch (error) {}
+              } catch (error) { }
             }
           } catch (error) {
             const formattedError = this.#formatPromptError(error)
@@ -2840,7 +2845,7 @@ export class ComfyApp {
                 if (widget && node.convertWidgetToInput?.(widget)) {
                   toSlot = node.inputs?.length - 1
                 }
-              } catch (error) {}
+              } catch (error) { }
             }
             if (toSlot != null || toSlot !== -1) {
               fromNode.connect(fromSlot, node, toSlot)
@@ -2874,7 +2879,7 @@ export class ComfyApp {
               if (widget && node.convertWidgetToInput?.(widget)) {
                 toSlot = node.inputs?.length - 1
               }
-            } catch (error) {}
+            } catch (error) { }
           }
           if (toSlot != null || toSlot !== -1) {
             fromNode.connect(fromSlot, node, toSlot)

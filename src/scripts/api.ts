@@ -91,6 +91,7 @@ class ComfyApi extends EventTarget {
   #pollQueue() {
     setInterval(async () => {
       try {
+        // TODO: query携带工作流名称
         const resp = await this.fetchApi('/prompt')
         const status = await resp.json()
         this.dispatchEvent(new CustomEvent('status', { detail: status }))
@@ -287,7 +288,7 @@ class ComfyApi extends EventTarget {
     for (const key in objectInfoUnsafe) {
       const validatedDef = validateComfyNodeDef(
         objectInfoUnsafe[key],
-        /* onError=*/ (errorMessage: string) => {
+        /* onError=*/(errorMessage: string) => {
           console.warn(
             `Skipping invalid node definition: ${key}. See debug log for more information.`
           )
@@ -321,13 +322,18 @@ class ComfyApi extends EventTarget {
     } else if (number != 0) {
       body.number = number
     }
+    // TODO:增加prompt接口的传参
+    // 获取当前 URL
+    const currentUrl = new URL(window.location.href);
+    // 从 URL 查询参数中获取 workflowName 的值
+    const workflowName = currentUrl.searchParams.get('workflowName');
 
-    const res = await this.fetchApi('/prompt', {
+    const res = await this.fetchApi('/prompt' + (workflowName ? `?workflowName=${workflowName}` : ''), {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(body)
+      body: JSON.stringify(body),
     })
 
     if (res.status !== 200) {
@@ -599,7 +605,20 @@ class ComfyApi extends EventTarget {
   /**
    * Gets a user data file for the current user
    */
-  async getUserData(file: string, options?: RequestInit) {
+  // TODO:加载workflow文件请求函数
+  async getUserData(file: string, options?: RequestInit, id?: string, from?: string) {
+    let queryStr = ''
+    // 增加参数，id 和 from
+    if (id || from) {
+      if (!from) {
+        queryStr = `?id=${id}`
+      } else if (!id) {
+        queryStr = `?from=${from}`
+      } else {
+        queryStr = `?id=${id}&from=${from}`
+      }
+    }
+
     return this.fetchApi(`/userdata/${encodeURIComponent(file)}`, options)
   }
 
