@@ -382,22 +382,13 @@ export class ComfyWorkflow {
   }
 
   private async _save(path: string | null, overwrite: boolean) {
-    function formatDate(date: Date): string {
-      const year = date.getFullYear();
-      const month = String(date.getMonth() + 1).padStart(2, '0'); // 月份从0开始，所以要加1
-      const day = String(date.getDate()).padStart(2, '0');
-      const hours = String(date.getHours()).padStart(2, '0');
-      const minutes = String(date.getMinutes()).padStart(2, '0');
-      const seconds = String(date.getSeconds()).padStart(2, '0');
-
-      return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-    }
     if (!path) {
+      console.log(this.path, this.name);
       path = await showPromptDialog({
         title: 'Save workflow',
         message: 'Enter the filename:',
         // 新文件，默认文件名为 workflow，另存为则原文件名+副本
-        defaultValue: '工作流 ' + formatDate(new Date()) 
+        defaultValue: trimJsonExt(this.path) ?? this.name ?? 'workflow'
       })
       if (!path) return
     }

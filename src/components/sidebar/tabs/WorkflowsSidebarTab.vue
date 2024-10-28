@@ -3,14 +3,15 @@
     :title="$t('sideToolbar.workflows')"
     class="bg-[var(--p-tree-background)]"
   >
+  <!-- 侧边栏：工作流：按钮集合 -->
     <template #tool-buttons>
-      <Button
+      <!-- <Button
         class="browse-templates-button"
         icon="pi pi-th-large"
         v-tooltip="$t('sideToolbar.browseTemplates')"
         text
         @click="() => commandStore.execute('Comfy.BrowseTemplates')"
-      />
+      /> -->
       <Button
         class="open-workflow-button"
         icon="pi pi-folder-open"

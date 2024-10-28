@@ -23,7 +23,9 @@ const customHeader = {
 
 // 重写 window.fetch 函数
 const originalFetch = window.fetch;
-window.fetch = function (input, init = {}) {
+window.fetch = function (input, init = {
+  headers: {}
+}) {
 
   // 检查请求参数是否为格式化的对象
   if (typeof input === 'object' && input !== null) {
