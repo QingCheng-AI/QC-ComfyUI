@@ -1874,6 +1874,7 @@ export class ComfyApp {
     // Load previous workflow
     let restored = false
     try {
+      // 初始化加载，原本是从localstorage中读取workflow，现在改成从服务器获取workflow
       const loadWorkflow = async (json) => {
         if (json) {
           const workflow = JSON.parse(json)
@@ -1883,7 +1884,13 @@ export class ComfyApp {
           const currentUrl = new URL(window.location.href);
           // 从 URL 查询参数中获取 workflowName 的值
           const workflowName = currentUrl.searchParams.get('workflowName');
-          await this.loadGraphData(workflow, true, true, workflowName)
+          const id = currentUrl.searchParams.get('id');
+          const from = currentUrl.searchParams.get('from');
+          
+          // 改动：不从本地存储中读取workflowName，而是从url拿到参数取查询data后取读取
+          const resp = await api.getUserData('workflows/' + workflowName, undefined, id, from)
+          const data = await resp.json()
+          await this.loadGraphData(data, true, true, workflowName)
           return true
         }
       }

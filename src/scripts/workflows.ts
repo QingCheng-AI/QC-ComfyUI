@@ -99,7 +99,6 @@ export class ComfyWorkflowManager extends EventTarget {
         workflow.unsaved = !workflow
       }
     }
-
     if (!(toRaw(workflow) instanceof ComfyWorkflow)) {
       // Still not found, either reloading a deleted workflow or blank
       workflow = new ComfyWorkflow(
@@ -119,6 +118,7 @@ export class ComfyWorkflowManager extends EventTarget {
     this._activeWorkflow = workflow
 
     setStorageValue('Comfy.PreviousWorkflow', this.activeWorkflow.path ?? '')
+    window['CurrentWorkflow'] = this.activeWorkflow.path ?? ''
     this.dispatchEvent(new CustomEvent('changeWorkflow'))
   }
 
@@ -232,14 +232,15 @@ export class ComfyWorkflow {
     this.name = trimJsonExt(pathParts[pathParts.length - 1])
   }
 
-  // 获取工作流封装函数TODO:没搞懂调用链路
-  async getWorkflowData() {
+  // 主动获取工作流封装函数TODO:没搞懂调用链路
+  async getWorkflowData(path?: string) {
     // 获取当前 URL
-    const currentUrl = new URL(window.location.href);
-    // 从 URL 查询参数中获取 workflowName 的值
-    const id = currentUrl.searchParams.get('id');
-    const from = currentUrl.searchParams.get('from');
-    const resp = await api.getUserData('workflows/' + this.path, undefined, id, from)
+    // const currentUrl = new URL(window.location.href);
+    // 从 URL 查询参数中获取 workflowName 的值(主动获取工作流时不传url的id)
+    // const id = currentUrl.searchParams.get('id');
+    // const from = currentUrl.searchParams.get('from');
+    console.log(" getUserData workflow");
+    const resp = await api.getUserData('workflows/' + (path || this.path), undefined, '', 'space')
     if (resp.status !== 200) {
       useToastStore().addAlert(
         `Error loading workflow file '${this.path}': ${resp.status} ${resp.statusText}`
@@ -263,6 +264,7 @@ export class ComfyWorkflow {
         }
       )
     } else {
+      // 主动加载并存储起来，再次点击时覆盖localStorage数据
       const data = await this.getWorkflowData()
       if (!data) return
       await this.manager.app.loadGraphData(data, true, true, this)
@@ -331,6 +333,7 @@ export class ComfyWorkflow {
     }
     this.manager.dispatchEvent(new CustomEvent('rename', { detail: this }))
     setStorageValue('Comfy.PreviousWorkflow', this.path ?? '')
+    window['CurrentWorkflow'] = this.path ?? ''
   }
 
   async insert() {
@@ -379,11 +382,22 @@ export class ComfyWorkflow {
   }
 
   private async _save(path: string | null, overwrite: boolean) {
+    function formatDate(date: Date): string {
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0'); // 月份从0开始，所以要加1
+      const day = String(date.getDate()).padStart(2, '0');
+      const hours = String(date.getHours()).padStart(2, '0');
+      const minutes = String(date.getMinutes()).padStart(2, '0');
+      const seconds = String(date.getSeconds()).padStart(2, '0');
+
+      return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+    }
     if (!path) {
       path = await showPromptDialog({
         title: 'Save workflow',
         message: 'Enter the filename:',
-        defaultValue: trimJsonExt(this.path) ?? this.name ?? 'workflow'
+        // 新文件，默认文件名为 workflow，另存为则原文件名+副本
+        defaultValue: '工作流 ' + formatDate(new Date()) 
       })
       if (!path) return
     }
@@ -431,6 +445,7 @@ export class ComfyWorkflow {
       this.unsaved = false
       this.manager.dispatchEvent(new CustomEvent('rename', { detail: this }))
       setStorageValue('Comfy.PreviousWorkflow', this.path ?? '')
+      window['CurrentWorkflow'] = this.path ?? ''
     } else if (path !== this.path) {
       // Saved as, open the new copy
       await this.manager.loadWorkflows()

@@ -78,7 +78,13 @@ export const useUserFileStore = defineStore('userFile', () => {
 
   const loadFile = async (file: UserFile) => {
     file.isLoading = true
-    const resp = await api.getUserData(file.path)
+        // 获取当前 URL
+    const currentUrl = new URL(window.location.href);
+    // 从 URL 查询参数中获取 workflowName 的值(主动获取工作流时不传url的id)
+    const id = currentUrl.searchParams.get('id');
+    const from = currentUrl.searchParams.get('from');
+    
+    const resp = await api.getUserData(file.path,undefined)
     if (resp.status !== 200) {
       throw new Error(
         `Failed to load file '${file.path}': ${resp.status} ${resp.statusText}`

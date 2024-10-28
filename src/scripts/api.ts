@@ -326,8 +326,11 @@ class ComfyApi extends EventTarget {
     // 获取当前 URL
     const currentUrl = new URL(window.location.href);
     // 从 URL 查询参数中获取 workflowName 的值
-    const workflowName = currentUrl.searchParams.get('workflowName');
-
+    let workflowName = currentUrl.searchParams.get('workflowName');
+    // 如果 切换了工作流，则不用url上的信息，暂时从本地存储的workflowName中获取workflowName
+    if (window['CurrentWorkflow'] !== workflowName) {
+      workflowName = window['CurrentWorkflow']
+    }
     const res = await this.fetchApi('/prompt' + (workflowName ? `?workflowName=${workflowName}` : ''), {
       method: 'POST',
       headers: {
@@ -607,6 +610,7 @@ class ComfyApi extends EventTarget {
    */
   // TODO:加载workflow文件请求函数
   async getUserData(file: string, options?: RequestInit, id?: string, from?: string) {
+    console.log('getUserData');
     let queryStr = ''
     // 增加参数，id 和 from
     if (id || from) {
@@ -619,7 +623,7 @@ class ComfyApi extends EventTarget {
       }
     }
 
-    return this.fetchApi(`/userdata/${encodeURIComponent(file)}`, options)
+    return this.fetchApi(`/userdata/${encodeURIComponent(file)}` + queryStr, options)
   }
 
   /**

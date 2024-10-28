@@ -18,7 +18,7 @@ import 'primeicons/primeicons.css'
 // 改动：重写fetch函数，添加 Authorization 头，进行用户身份鉴权
 // 定义要添加的 header 键值对
 const customHeader = {
-  'Authorization': localStorage.getItem('accessToken') || ''
+  'Authorization': 'Bearer '+localStorage.getItem('accessToken') || ''
 };
 
 // 重写 window.fetch 函数

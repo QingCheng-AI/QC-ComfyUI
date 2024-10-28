@@ -15,7 +15,7 @@
             @click="loadWorkflow(template)"
           >
             <img
-              :src="`/templates/${template}.jpg`"
+              :src="`/comfyui/templates/${template}.jpg`"
               class="w-64 h-64 rounded-lg object-cover"
             />
             <a>
@@ -54,7 +54,7 @@ const loading = ref<string | null>(null)
 
 const loadWorkflow = async (id: string) => {
   loading.value = id
-  const json = await fetch(api.fileURL(`templates/${id}.json`)).then((r) =>
+  const json = await fetch(api.fileURL(`comfyui/templates/${id}.json`)).then((r) =>
     r.json()
   )
   useDialogStore().closeDialog()
