@@ -68,7 +68,7 @@
           class="comfyui-workflows-bookmarks"
           v-show="workflowStore.bookmarkedWorkflows.length > 0"
         >
-          <TextDivider text="Bookmarks" type="dashed" class="ml-2" />
+          <TextDivider text="收藏" type="dashed" class="ml-2" />
           <TreeExplorer
             :roots="
               renderTreeNode(workflowStore.bookmarkedWorkflowsTree).children
@@ -80,7 +80,7 @@
           </TreeExplorer>
         </div>
         <div class="comfyui-workflows-browse">
-          <TextDivider text="Browse" type="dashed" class="ml-2" />
+          <TextDivider text="创作池" type="dashed" class="ml-2" />
           <TreeExplorer
             :roots="renderTreeNode(workflowStore.workflowsTree).children"
             v-model:expandedKeys="expandedKeys"

@@ -6,6 +6,7 @@
       v-show="betaMenuEnabled"
       :class="{ dropzone: isDropZone, 'dropzone-active': isDroppable }"
     >
+      <!-- 更改新版菜单的title -->
       <h1 class="comfyui-logo mx-2">ComfyUI</h1>
       <CommandMenubar />
       <Divider layout="vertical" class="mx-2" />

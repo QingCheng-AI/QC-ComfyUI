@@ -1,4 +1,5 @@
 <template>
+  <!-- 配置里的关于 -->
   <div class="system-stats">
     <div class="mb-6">
       <h2 class="text-2xl font-semibold mb-4">{{ $t('systemInfo') }}</h2>
@@ -10,7 +11,7 @@
       </div>
     </div>
 
-    <Divider />
+    <!-- <Divider />
 
     <div>
       <h2 class="text-2xl font-semibold mb-4">{{ $t('devices') }}</h2>
@@ -24,17 +25,17 @@
         </TabPanel>
       </TabView>
       <DeviceInfo v-else :device="props.stats.devices[0]" />
-    </div>
+    </div> -->
   </div>
 </template>
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import TabView from 'primevue/tabview'
-import TabPanel from 'primevue/tabpanel'
-import Divider from 'primevue/divider'
+// import TabView from 'primevue/tabview'
+// import TabPanel from 'primevue/tabpanel'
+// import Divider from 'primevue/divider'
 import type { SystemStats } from '@/types/apiTypes'
-import DeviceInfo from '@/components/common/DeviceInfo.vue'
+// import DeviceInfo from '@/components/common/DeviceInfo.vue'
 import { formatMemory } from '@/utils/formatUtil'
 
 const props = defineProps<{
@@ -51,7 +52,7 @@ const systemColumns = [
   { field: 'python_version', header: 'Python Version' },
   { field: 'embedded_python', header: 'Embedded Python' },
   { field: 'pytorch_version', header: 'Pytorch Version' },
-  { field: 'argv', header: 'Arguments' },
+  // { field: 'argv', header: 'Arguments' },
   { field: 'ram_total', header: 'RAM Total' },
   { field: 'ram_free', header: 'RAM Free' }
 ]
