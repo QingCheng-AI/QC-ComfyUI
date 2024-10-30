@@ -6,8 +6,9 @@
       v-show="betaMenuEnabled"
       :class="{ dropzone: isDropZone, 'dropzone-active': isDroppable }"
     >
-      <!-- 更改新版菜单的title -->
-      <h1 class="comfyui-logo mx-2">ComfyUI</h1>
+      <div class="h-[38px] px-3 py-1">
+        <img class="h-full" :src="currentTheme == 'light' ? '/assets/logo_lightmode.png' : '/assets/logo_darkmode.png'" />
+      </div>
       <CommandMenubar />
       <Divider layout="vertical" class="mx-2" />
       <div class="flex-grow">
@@ -30,6 +31,7 @@ import { app } from '@/scripts/app'
 import { useEventBus } from '@vueuse/core'
 
 const settingStore = useSettingStore()
+const currentTheme = computed(() => settingStore.get('Comfy.ColorPalette'))
 const workflowTabsPosition = computed(() =>
   settingStore.get('Comfy.Workflow.WorkflowTabsPosition')
 )
