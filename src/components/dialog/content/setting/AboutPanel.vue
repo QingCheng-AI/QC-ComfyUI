@@ -18,46 +18,27 @@
         </Tag>
       </a>
     </div>
-
-    <Divider />
-
-    <SystemStatsPanel
-      v-if="systemStatsStore.systemStats"
-      :stats="systemStatsStore.systemStats"
-    />
   </div>
 </template>
 
 <script setup lang="ts">
 import { useSystemStatsStore } from '@/stores/systemStatsStore'
 import Tag from 'primevue/tag'
-import Divider from 'primevue/divider'
 import { computed, onMounted } from 'vue'
-import SystemStatsPanel from '@/components/common/SystemStatsPanel.vue'
 
 const systemStatsStore = useSystemStatsStore()
-const frontendVersion = window['__COMFYUI_FRONTEND_VERSION__']
-const coreVersion = computed(
-  () => systemStatsStore.systemStats?.system?.comfyui_version ?? ''
-)
 
 const links = computed(() => [
   {
-    label: `ComfyUI ${coreVersion.value}`,
+    label: `ComfyUI`,
     url: 'https://github.com/comfyanonymous/ComfyUI',
     icon: 'pi pi-github'
   },
   {
-    label: `ComfyUI_frontend v${frontendVersion}`,
-    url: 'https://github.com/Comfy-Org/ComfyUI_frontend',
+    label: `ComfyUI_frontend QingCheng Edition`,
+    url: 'https://github.com/QingCheng-AI/QC-ComfyUI',
     icon: 'pi pi-github'
-  },
-  {
-    label: 'Discord',
-    url: 'https://www.comfy.org/discord',
-    icon: 'pi pi-discord'
-  },
-  { label: 'ComfyOrg', url: 'https://www.comfy.org/', icon: 'pi pi-globe' }
+  }
 ])
 
 onMounted(async () => {
